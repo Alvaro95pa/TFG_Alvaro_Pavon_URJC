@@ -1,0 +1,15 @@
+# Change Log
+All notable changes to this project will be documented in this file.
+
+This project adheres to Semantic Versioning (http://semver.org/)
+
+## [0.0.0]
+### Added
+- gemspec file
+- lib/mapper/point.rb with some functionality
+- lib/mapper/node_map.rb with some functionality
+- lib/mapper/map.rb
+- lib/roleplay_framework.rb : main source file of the library
+- Rakefile file
+- test/test_rpframework.rb : testing source file
+- This changelog
