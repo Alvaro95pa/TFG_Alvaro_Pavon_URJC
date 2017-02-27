@@ -3,7 +3,22 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to Semantic Versioning (http://semver.org/)
 
-## [0.0.0]
+## [0.1.1] - 27/02/2017
+### Added
+- XML examples for testing
+
+### Changed
+- New method "movement" for Node_map
+- Added redefinition of comparator for Point
+- Configure Point to allow it to be a key of a hash
+- Change roleplay_framework.rb for class to module
+- Added assertions to test script (test_rpframework.rb)
+
+
+
+
+
+## [0.0.0] - 20/02/2017
 ### Added
 - gemspec file
 - lib/mapper/point.rb with some functionality

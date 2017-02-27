@@ -7,14 +7,28 @@ class Point
   numeric_node :x, "x"
   numeric_node :y, "y"
   
-  #Returns true if the point has the same x and y values of self
-  def same_position?(point)
-    ((self.x == point.x) && (self.y == point.y))
+  #Redefinition of equal operator
+  def ==(other)
+    (self.class ==other.class) && (self.state == other.state)
+  end
+  
+  #Use Point == for eql? method
+  alias_method :eql?, :==
+  
+  #It allows to use Point as a hash key
+  def hash
+    state.hash
   end
   
   #Writes the point
   def to_s
     "(#{x},#{y})"
+  end
+  
+  protected
+  
+  def state
+    [x, y]
   end
   
 end
