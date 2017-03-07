@@ -3,6 +3,24 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to Semantic Versioning (http://semver.org/)
 
+## [1.1.1] - 07/03/2017
+### Added
+- XML Schema for well-formed XML Map files.
+- lib/mapper/dungeon.rb (Dungeon class).
+
+### Changed
+- Changed the XML parsing gem from XML-mapping to Nokogiri
+- Changes on every ruby class to adapt them to Nokogiri (Added "initialize" methods)
+- Added builder methods on Map class to transform XML nodes to ruby objects with
+  Nokogiri.
+- Gemspec updated with the Nokogiri dependency.
+- Added assertions to test script (test_rpframework.rb)
+- test1.xml file updated for testing
+
+### Removed
+- test2.xml file removed.
+
+
 ## [0.1.1] - 27/02/2017
 ### Added
 - XML examples for testing
@@ -13,9 +31,6 @@ This project adheres to Semantic Versioning (http://semver.org/)
 - Configure Point to allow it to be a key of a hash
 - Change roleplay_framework.rb for class to module
 - Added assertions to test script (test_rpframework.rb)
-
-
-
 
 
 ## [0.0.0] - 20/02/2017

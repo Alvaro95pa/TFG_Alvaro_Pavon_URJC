@@ -1,11 +1,12 @@
-require 'xml/mapping'
 
 class Point
-  include XML::Mapping
+  
+  def initialize(x, y)
+    @x, @y = x, y
+  end
   
   #Attributes
-  numeric_node :x, "x"
-  numeric_node :y, "y"
+  attr_accessor :x, :y
   
   #Redefinition of equal operator
   def ==(other)
