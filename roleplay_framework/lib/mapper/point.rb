@@ -5,7 +5,7 @@ class Point
     @x, @y = x, y
   end
   
-  #Attributes
+  #Attributes access
   attr_accessor :x, :y
   
   #Redefinition of equal operator
@@ -21,7 +21,7 @@ class Point
     state.hash
   end
   
-  #Writes the point
+  #To string
   def to_s
     "(#{x},#{y})"
   end

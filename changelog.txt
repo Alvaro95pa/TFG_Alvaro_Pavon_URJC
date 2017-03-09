@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to Semantic Versioning (http://semver.org/)
 
+## [1.1.2] - 09/03/2017
+### Changed
+- More test added to the testing script.
+- Little typo changes.
+
+### Fixed
+- An error where the casting from Nokogiri object 
+  to a native Ruby data type was not working correctly.
+- An error on the adjacent list builder, where the adjacent points
+  were being taken from th wrong point node at the XML file.
+
 ## [1.1.1] - 07/03/2017
 ### Added
 - XML Schema for well-formed XML Map files.

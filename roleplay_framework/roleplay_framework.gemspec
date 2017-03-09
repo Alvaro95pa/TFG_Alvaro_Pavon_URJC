@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'roleplay_framework'
-  s.version     = '1.1.1'
+  s.version     = '1.1.2'
   s.add_runtime_dependency "nokogiri", ["= 1.6.8"]
   s.date        = '2017-02-20'
   s.summary     = "Roleplay games library"

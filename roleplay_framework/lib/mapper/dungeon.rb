@@ -4,9 +4,12 @@ class Dungeon
     @name = name
   end
   
+  #Attributes access
+  attr_reader :name
+  
+  #To string
   def to_s()
     "#{@name}"
   end
   
-  attr_reader :name
 end

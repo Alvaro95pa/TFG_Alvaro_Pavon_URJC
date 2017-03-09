@@ -6,7 +6,10 @@ class Map_node
   def initialize(point, dungeon, adjacent)
     @point, @dungeon, @adjacent = point, dungeon, adjacent
   end
-
+  
+  #Attributes access
+  attr_reader :point, :dungeon, :adjacent
+  
   #Returns true if point is at adjacent list
   def is_adjacent?(point)
     @adjacent.find() { |p|
@@ -29,6 +32,5 @@ class Map_node
       raise RuntimeError, "The node has not adjacent"
     end
   end
-  
-  attr_reader :point, :dungeon, :adjacent
+
 end
