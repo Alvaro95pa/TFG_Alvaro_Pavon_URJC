@@ -1,10 +1,9 @@
 require 'mapper/map'
 
-class Roleplay_framework
+module Roleplay_framework
   
-  def initialize(fileName)
-    @map = Map.load_from_file(fileName)
+  def init_Map(filename)
+    Map.new(filename)
   end
   
-  attr_reader :map
 end
