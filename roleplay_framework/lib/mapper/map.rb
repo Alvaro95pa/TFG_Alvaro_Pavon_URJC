@@ -10,9 +10,11 @@ class Map
   #Attribute access
   attr_reader :map   
   
-  #Parse XML document and returns a String
-  def parse_from_XML(file)
-    File.open(file) { |f| Nokogiri::XML(f) }
+  #Returns an adjacent point
+  def movement(point, despX, despY)
+    n = return_node(point)
+    newP = n.move(despX, despY)
+    return return_node(newP)
   end
   
   #Returns the node with that coordinates
@@ -22,6 +24,12 @@ class Map
   
   private
   
+  #Parse XML document and returns a String
+  def parse_from_XML(file)
+    File.open(file) { |f| Nokogiri::XML(f) }
+  end
+  
+  #Builds the hash table with all the nodes
   def build_nodes(file)
     m = Hash.new()
     doc = parse_from_XML(file)
@@ -34,19 +42,22 @@ class Map
       m[point] = n
     }
     return m
-  end
+  end   
   
+  #Builds the point of a node
   def build_point(node)
     x = node.xpath("point//x/text()").to_s()
     y = node.xpath("point//y/text()").to_s()
     Point.new(x.to_i(), y.to_i())
   end
   
+  #Builds the dungeon object of a node
   def build_dungeon(node)
     name = node.xpath("dungeon//name/text()").to_s()
     Dungeon.new(name)
   end
   
+  #Builds the adjacent list of a node
   def build_adjacent(node)
     adjacent = []
     node.xpath("adjacent//point").each() { |point|

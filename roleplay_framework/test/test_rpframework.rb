@@ -54,9 +54,8 @@ class RPTest < Minitest::Test
   def test_movement()
       m = init_Map("test/test1.xml")
       p = Point.new(0,0)
-      node = m.return_node(p)
       assert_raises(RuntimeError) {
-        node.move(1,0) 
+        m.movement(p,1,0)
       }   
   end
 

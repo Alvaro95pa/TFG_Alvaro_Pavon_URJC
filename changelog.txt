@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to Semantic Versioning (http://semver.org/)
 
+## [1.2.2] - 12/03/2017
+### Added
+- Added movement method to Map. This method encapsulates the move
+  method of Node_map and returns a node object.
+
 ## [1.1.2] - 09/03/2017
 ### Changed
 - More test added to the testing script.
