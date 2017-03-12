@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<map xmlns="http://www.w3schools.com"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.w3schools.com ../lib/mapper/map.xsd">
+	<node>
+		<point>
+			<x>0</x>
+			<y>0</y>
+		</point>
+		<dungeon>
+			<name>Lake</name>
+			<description>A deep dark lake</description>
+		</dungeon>
+
+		<adjacent>
+			<point>
+				<x>1</x>
+				<y>0</y>
+			</point>
+		</adjacent>
+	</node>
+	<node>
+		<point>
+			<x>1</x>
+			<y>0</y>
+		</point>
+		<dungeon>
+			<name>Cave</name>
+			<description>A dangerous unexplored cave</description>
+		</dungeon>
+		<adjacent>
+			<point>
+				<x>0</x>
+				<y>0</y>
+			</point>
+		</adjacent>
+	</node>
+</map>

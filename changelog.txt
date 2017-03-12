@@ -3,7 +3,58 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to Semantic Versioning (http://semver.org/)
 
-## [0.0.0]
+## [1.2.2] - 12/03/2017
+### Added
+- Added movement method to Map. This method encapsulates the move
+  method of Node_map and returns a node object.
+- Added new attribute to Dungeon class.
+
+### Changed
+- Map XSD and testing examples adapted to the new Dungeon attribute
+- Map class builder dungeon method adapted to the new attribute
+
+## [1.1.2] - 09/03/2017
+### Changed
+- More test added to the testing script.
+- Little typo changes.
+
+### Fixed
+- An error where the casting from Nokogiri object 
+  to a native Ruby data type was not working correctly.
+- An error on the adjacent list builder, where the adjacent points
+  were being taken from th wrong point node at the XML file.
+
+## [1.1.1] - 07/03/2017
+### Added
+- XML Schema for well-formed XML Map files.
+- lib/mapper/dungeon.rb (Dungeon class).
+
+### Changed
+- Changed the XML parsing gem from XML-mapping to Nokogiri
+- Changes on every ruby class to adapt them to Nokogiri (Added "initialize" methods)
+- Added builder methods on Map class to transform XML nodes to ruby objects with
+  Nokogiri.
+- Gemspec updated with the Nokogiri dependency.
+- Added assertions to test script (test_rpframework.rb)
+- test1.xml file updated for testing
+
+### Removed
+- test2.xml file removed.
+
+
+## [0.1.1] - 27/02/2017
+### Added
+- XML examples for testing
+
+### Changed
+- New method "movement" for Node_map
+- Added redefinition of comparator for Point
+- Configure Point to allow it to be a key of a hash
+- Change roleplay_framework.rb for class to module
+- Added assertions to test script (test_rpframework.rb)
+
+
+## [0.0.0] - 20/02/2017
 ### Added
 - gemspec file
 - lib/mapper/point.rb with some functionality
