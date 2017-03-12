@@ -54,7 +54,8 @@ class Map
   #Builds the dungeon object of a node
   def build_dungeon(node)
     name = node.xpath("dungeon//name/text()").to_s()
-    Dungeon.new(name)
+    description = node.xpath("dungeon//description/text()").to_s()
+    Dungeon.new(name, description)
   end
   
   #Builds the adjacent list of a node

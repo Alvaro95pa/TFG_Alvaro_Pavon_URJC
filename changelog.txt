@@ -7,6 +7,11 @@ This project adheres to Semantic Versioning (http://semver.org/)
 ### Added
 - Added movement method to Map. This method encapsulates the move
   method of Node_map and returns a node object.
+- Added new attribute to Dungeon class.
+
+### Changed
+- Map XSD and testing examples adapted to the new Dungeon attribute
+- Map class builder dungeon method adapted to the new attribute
 
 ## [1.1.2] - 09/03/2017
 ### Changed

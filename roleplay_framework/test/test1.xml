@@ -10,6 +10,7 @@
 		</point>
 		<dungeon>
 			<name>Lake</name>
+			<description>A deep dark lake</description>
 		</dungeon>
 
 		<adjacent>
@@ -26,6 +27,7 @@
 		</point>
 		<dungeon>
 			<name>Cave</name>
+			<description>A dangerous unexplored cave</description>
 		</dungeon>
 		<adjacent>
 			<point>
