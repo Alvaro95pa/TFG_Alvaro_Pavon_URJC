@@ -1,8 +1,7 @@
-require 'xml/mapping'
-require 'map_node'
+require 'nokogiri'
+require 'mapper/map_node'
 
 class Map
-  include XML::Mapping
 
   def initialize(file)
     @map = build_nodes(file)
