@@ -1,7 +1,5 @@
-roleplay_framework/.buildpath
-roleplay_framework/.project
-roleplay_framework/roleplay_framework-0.0.0.gem
-roleplay_framework/roleplay_framework-0.1.1.gem
-roleplay_framework/roleplay_framework-1.1.1.gem
-roleplay_framework/roleplay_framework-1.1.2.gem
-roleplay_framework/roleplay_framework-1.2.2.gem
+rubyplay_framework/.buildpath
+rubyplay_framework/.project
+rubyplay_framework/rubyplay_framework-1.2.2.gem
+rubyplay_framework/rubyplay_framework-1.3.3.gem
+rubyplay_framework/lib/map/mapPainter.rb

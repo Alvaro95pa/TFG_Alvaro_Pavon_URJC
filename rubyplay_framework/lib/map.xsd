@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema targetNamespace="http://www.w3schools.com/map.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://www.w3schools.com/map.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    
+<xs:complexType name="pointType">
+	<xs:sequence>
+		<xs:element name="x" type="xs:integer"/>
+		<xs:element name="y" type="xs:integer"/>
+		<xs:element name="z" type="xs:integer"/>
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="entityType">
+	<xs:sequence>
+		<xs:element name="type" minOccurs="1" maxOccurs="1">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value="[A-Z]([a-z])*"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:element>
+		<xs:element name="nametag" type="xs:string" minOccurs="1" maxOccurs="1"/>
+		<xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="dungeonType">
+	<xs:sequence>
+		<xs:element name="name" type="xs:string"/>
+		<xs:element name="description" type="xs:string"/>
+		<xs:element name="entity" type="entityType" minOccurs="0" maxOccurs="unbounded"/>
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="adjacentType">
+	<xs:sequence>
+		<xs:element name="point" type="pointType" minOccurs="1" maxOccurs="unbounded"/>
+	</xs:sequence>
+</xs:complexType>
+
+<xs:element name="map">
+  <xs:complexType>
+  	<xs:sequence>
+  		<xs:element name="node" minOccurs="2" maxOccurs="unbounded">
+		  <xs:complexType>
+		  	<xs:sequence>
+			    <xs:element name="point" type="pointType" minOccurs="1" maxOccurs="1"/>
+			    <xs:element name="dungeon" type="dungeonType" minOccurs="1" maxOccurs="1"/>
+			    <xs:element name="adjacent" type="adjacentType" minOccurs="1" maxOccurs="1"/>
+		    </xs:sequence>
+		  </xs:complexType>
+  		</xs:element>
+  	</xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+</xs:schema>
