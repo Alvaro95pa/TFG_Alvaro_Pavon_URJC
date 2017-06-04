@@ -3,7 +3,16 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to Semantic Versioning (http://semver.org/)
 
-## [1.3.3] - 29/05/2017 [Unreleased]
+## [1.4.3] - 04/06/2017 [Unreleased]
+### Added
+- Intepreter folder
+- Rexical file
+- Racc file
+
+### Changed
+- Added more task to Rakefile to generate .rb for rexical and racc files
+
+## [0.4.3] - 29/05/2017 [Unreleased]
 ### Added
 - Entity class and EntityXPathBuilder class (MapEntity module)
 - New builder classes for Dungeon and Point (MapDungeon and MapPoint modules)
@@ -25,7 +34,7 @@ This project adheres to Semantic Versioning (http://semver.org/)
 - Fixed the problem that allows user to create disconnected graphs
 
 
-## [1.2.2] - 12/03/2017 [Unreleased]
+## [0.3.2] - 12/03/2017 [Unreleased]
 ### Added
 - Added movement method to Map. This method encapsulates the move
   method of Node_map and returns a node object.
@@ -35,7 +44,7 @@ This project adheres to Semantic Versioning (http://semver.org/)
 - Map XSD and testing examples adapted to the new Dungeon attribute
 - Map class builder dungeon method adapted to the new attribute
 
-## [1.1.2] - 09/03/2017 [Unreleased]
+## [0.2.2] - 09/03/2017 [Unreleased]
 ### Changed
 - More test added to the testing script.
 - Little typo changes.
@@ -46,7 +55,7 @@ This project adheres to Semantic Versioning (http://semver.org/)
 - An error on the adjacent list builder, where the adjacent points
   were being taken from th wrong point node at the XML file.
 
-## [1.1.1] - 07/03/2017 [Unreleased]
+## [0.2.1] - 07/03/2017 [Unreleased]
 ### Added
 - XML Schema for well-formed XML Map files.
 - lib/mapper/dungeon.rb (Dungeon class).

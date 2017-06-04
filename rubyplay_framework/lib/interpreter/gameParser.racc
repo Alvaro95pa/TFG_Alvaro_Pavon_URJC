@@ -1,0 +1,23 @@
+class GameLanguage
+rule
+  expression : FUNCTION
+  | FUNCTION WORD { return val }
+  | FUNCTION DIGIT DIGIT { return val }
+end
+
+---- header
+  require_relative 'gameLexer'
+
+---- inner
+  def parse(object, input)
+    output = scan_str(input)
+    if(output.kind_of?(Array))
+    	object.public_send(delete_parenthesis(output[0]).to_sym, *(output.drop(1)))
+    else
+    	object.public_send(delete_parenthesis(output).to_sym)
+    end
+  end
+  
+  def delete_parenthesis(string)
+  	string.tr('()', '')
+  end

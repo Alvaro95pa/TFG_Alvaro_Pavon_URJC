@@ -1,7 +1,9 @@
 Gem::Specification.new do |s|
   s.name        = 'rubyplay_framework'
-  s.version     = '1.3.3'
-  s.add_runtime_dependency "nokogiri", ["= 1.6.8"]
+  s.version     = '1.4.3'
+  s.add_runtime_dependency "nokogiri", '~>1.6', '>= 1.6.8'
+  s.add_runtime_dependency "rexical", '~>1.0', '>= 1.0.5'
+  s.add_runtime_dependency "racc", '~>1.4', '>= 1.4.14'
   s.date        = '2017-02-20'
   s.summary     = "Roleplay and Quest games development helper library"
   s.description = "A library to ease development of roleplay and quest games for text enviroments"
