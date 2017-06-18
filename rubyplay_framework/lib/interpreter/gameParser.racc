@@ -1,23 +1,40 @@
 class GameLanguage
 rule
-  expression : FUNCTION
+  function : FUNCTION
   | FUNCTION WORD { return val }
-  | FUNCTION DIGIT DIGIT { return val }
+  | FUNCTION WORD WORD { return val }
+  | FUNCTION WORD WORD WORD { return val }
+  | FUNCTION WORD WORD WORD WORD { return val }
+  | FUNCTION NUMBER NUMBER { return val }
+  | FUNCTION NUMBER NUMBER NUMBER { return val }
 end
 
 ---- header
   require_relative 'gameLexer'
 
 ---- inner
+  @@functions = []
+  
   def parse(object, input)
     output = scan_str(input)
     if(output.kind_of?(Array))
-    	object.public_send(delete_parenthesis(output[0]).to_sym, *(output.drop(1)))
+    	if(@@functions.find { |f| (f[0] == output[0]) && (f.length == output.length) })
+  			object.public_send(output[0].to_sym, *(output.drop(1)))
+  		else
+  			raise RuntimeError, "No such function #{output[0]}"
+  	    end
     else
-    	object.public_send(delete_parenthesis(output).to_sym)
+    	if(@@functions.find { |f| (f[0] == output) })
+  			object.public_send(output.to_sym)
+  		else
+  			raise RuntimeError, "No such function #{output}"
+  	    end
     end
   end
   
-  def delete_parenthesis(string)
-  	string.tr('()', '')
+  def intialize_functions(filename)
+  	file = File.open(filename).read
+  	file.each_line { |line| 
+  		@@functions << line.gsub(/\s+/, ' ').strip.split(" ")
+  	}
   end

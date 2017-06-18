@@ -57,20 +57,20 @@ class GameLanguage < Racc::Parser
     token = case @state
     when nil
       case
+      when (text = @ss.scan(/[ \t]+[a-z]+|[ \t]+[A-Z][a-z]+|[ \t]+[a-z]+\d+|[ \t]+[A-Z][a-z]+\d+/))
+         action { [:WORD, text.gsub!(/[\ \t]+/,'')] }
+
       when (text = @ss.scan(/[ \t]+/))
         ;
 
-      when (text = @ss.scan(/[a-z]+_[a-z]+\(\)/))
+      when (text = @ss.scan(/\d+|-\d+/))
+         action {[:NUMBER, text.to_i]}
+
+      when (text = @ss.scan(/\d+\.\d+|-\d+\.\d+/))
+         action {[:FLOAT, test.to_f]}
+
+      when (text = @ss.scan(/\w+/))
          action {[:FUNCTION, text]}
-
-      when (text = @ss.scan(/[a-z]+_[a-z]+/))
-         action {[:FUNCTION, text]}
-
-      when (text = @ss.scan(/[a-z]+/))
-         action { [:WORD, text] }
-
-      when (text = @ss.scan(/\d+/))
-         action {[:DIGIT, text.to_i]}
 
       else
         text = @ss.string[@ss.pos .. -1]

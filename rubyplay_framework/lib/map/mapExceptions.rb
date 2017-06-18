@@ -4,7 +4,7 @@ module MapExceptions
      
     def initialize(msg="The given map is not fully connected")
       super
-      end
+    end
      
   end
    

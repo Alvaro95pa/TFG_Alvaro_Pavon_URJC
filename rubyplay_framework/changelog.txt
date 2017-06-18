@@ -3,7 +3,18 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to Semantic Versioning (http://semver.org/)
 
-## [1.4.3] - 04/06/2017 [Unreleased]
+## [1.6.4] - 18/06/2017
+### Added
+- Command interpreter with lexer and parser
+- Test for the command interpreter
+
+### Changed
+- Entity, dungeon and point builders in order to make them extensible
+
+### Fixed
+- Bug that makes library to fail when building an extended map
+
+## [1.5.3] - 10/06/2017 [Unreleased]
 ### Added
 - Intepreter folder
 - Rexical file

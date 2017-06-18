@@ -17,21 +17,23 @@ include MapPoint, MapDungeon, MapEntity
   attr_reader :map_nodes, :adjacencies
   
   #Builds the map structure from XML specification
-  def build_map(file, url = false)
-    if(url)
-      doc = parse_from_URL(file)
+  def build_map(filePath, pointBuilder = "", dungeonBuilder = "", entityBuilder = "")
+    if(filePath.include?('http'))
+      doc = parse_from_URL(filePath)
     else
-      doc = parse_from_XML(file)
+      doc = parse_from_XML(filePath)
     end
     doc.remove_namespaces!
     doc.xpath("//node").each() { |node|
-      point = build_point(node, "point//x", "point//y", "point//z")
-      dungeon = build_dungeon(node)
+      coords = node.xpath("point//*")
+      point = build_point(coords, pointBuilder)
+      dungeonElements = node.xpath("dungeon//*[not(name()='entity') and not(ancestor-or-self::entity)]")
+      dungeon = build_dungeon(node, dungeonElements, dungeonBuilder, entityBuilder)
       @map_nodes[point] = dungeon
-      build_adjacent(point, node)
+      build_adjacent(point, node, pointBuilder)  
     }
     p = @map_nodes.keys().sample() #Get random key
-    if(@map_nodes.length() != check_connectivity(p, visited = []))
+    if(@map_nodes.length() != check_connectivity(p))
       raise MapExceptions::MalformedMapException.new()
     end
   end   
@@ -99,6 +101,9 @@ include MapPoint, MapDungeon, MapEntity
   def delete_adjacent(point, adjacent)
     @adjacencies[point].delete(adjacent)
     @adjacencies[adjacent].delete(point)
+    if(@map_nodes.length() != check_connectivity(point))
+      delete_node(adjacent)
+    end
   end
   
   #Adds a new entity to the node
@@ -117,16 +122,50 @@ include MapPoint, MapDungeon, MapEntity
   end
   
   #Checks if the map generated is fully connected
-  def check_connectivity(point, visited = [])
-    visited << point
+  def check_connectivity(point, visited = Hash.new())
+    visited[point] = 1
     @adjacencies[point].each { |nextPoint|
-      if(!visited.find {|vPoint| vPoint == nextPoint})
+      if(!visited.has_key?(nextPoint))
         check_connectivity(nextPoint, visited)
       end
     }
     return visited.length()
   end
   
+  #Shortest path from initial to destination
+  def shortest_path(initial, destination)
+    distance = Hash.new()
+    visited = Hash.new()
+    @adjacencies.each_key { |point|
+      if(is_adjacent?(initial, point))
+        distance[point] = 1
+      else
+        distance[point] = (2**(0.size * 8 - 2) - 1)
+      end
+    }
+    visited[initial] = true
+    distance.delete(initial)
+    until(visited.length == @adjacencies.length) do
+      if((value = distance.values.min) != nil)
+        if(!(visited.has_key?(distance.key(value))))
+          nextNode = distance.key(value)
+          visited[nextNode] = true
+          if(nextNode == destination)
+            break;
+          end
+          @adjacencies[nextNode].each { |a|
+            alt = distance[nextNode] + 1
+            if(!(visited.has_key?(a)) && alt < distance[a])
+              distance[a] = alt
+            end
+          }
+          distance.delete(nextNode)
+        end
+      end
+    end
+    return distance[destination]
+  end
+
 protected
   
   #Parse XML document and returns a String
@@ -136,32 +175,46 @@ protected
   
   #Parse XML from given url
   def parse_from_URL(url)
-    doc = Nokogiri::XML(open(url))
+    Nokogiri::XML(open(url))
   end   
   
   #Builds the point of a node
-  def build_point(node, xPath, yPath, zPath)
-    pointBuilder = PointXPathBuilder.new()
-    pointBuilder.build_XML_point(node, xPath, yPath, zPath)
-    pointBuilder.point()
+  def build_point(nodeSet, pointBuilder = "")
+    args = []
+    if(pointBuilder.length > 0)
+      builder = Object::const_get(pointBuilder).new()
+    else
+      builder = PointXPathBuilder.new()
+    end
+    nodeSet.each { |node| args << node.content }
+    builder.build_XML_point(*(args))
+    builder.point()
   end
   
   #Builds the dungeon object of a node
-  def build_dungeon(node)
-    if(node.xpath("dungeon//entity"))
-      dungeonBuilder = DungeonXPathBuilder.new()
-      dungeonBuilder.build_XML_dungeon(node, "dungeon//name", "dungeon//description", "dungeon//entity")
+  def build_dungeon(node, nodeSet, dungeonBuilder = "", entityBuilder = "")
+    args = []
+    if(dungeonBuilder.length > 0)
+      builder = Object::const_get(dungeonBuilder).new()
     else
-      dungeonBuilder = DungeonXPathBuilder.new()
-      dungeonBuilder.build_XML_dungeon(node, "dungeon//name", "dungeon//description")
+      builder = DungeonXPathBuilder.new()
     end
-    dungeonBuilder.dungeon()
+    nodeSet.each { |n| args << n.content }
+    if(!(node.xpath("dungeon//entity").empty?))
+      args << node.xpath("dungeon//entity")
+      args << entityBuilder
+      builder.build_XML_dungeon(*(args))
+    else
+      builder.build_XML_dungeon(*(args))
+    end
+    builder.dungeon()
   end
 
   #Builds the adjacent list of a node
-  def build_adjacent(point, node)
+  def build_adjacent(point, node, pointBuilder = nil)
     node.xpath("adjacent//point").each() { |pnt|
-      p = build_point(pnt, "x", "y", "z")
+      coords = pnt.xpath(".//*")
+      p = build_point(coords, pointBuilder)
       if(@adjacencies[point] == nil)
         @adjacencies[point] = [p]
       elsif(!(is_adjacent?(point, p)))

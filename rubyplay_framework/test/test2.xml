@@ -15,6 +15,10 @@
 				<type>Hero</type>
 				<nametag>Keops</nametag>
 			</entity>
+			<entity>
+				<type>Mob</type>
+				<nametag>Mummy</nametag>
+			</entity>
 		</dungeon>
 
 		<adjacent>

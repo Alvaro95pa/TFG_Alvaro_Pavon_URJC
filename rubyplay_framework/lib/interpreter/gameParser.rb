@@ -10,33 +10,48 @@ require 'racc/parser.rb'
 
 class GameLanguage < Racc::Parser
 
-module_eval(<<'...end gameParser.racc/module_eval...', 'gameParser.racc', 12)
+module_eval(<<'...end gameParser.racc/module_eval...', 'gameParser.racc', 16)
+  @@functions = []
+  
   def parse(object, input)
     output = scan_str(input)
     if(output.kind_of?(Array))
-    	object.public_send(delete_parenthesis(output[0]).to_sym, *(output.drop(1)))
+    	if(@@functions.find { |f| (f[0] == output[0]) && (f.length == output.length) })
+  			object.public_send(output[0].to_sym, *(output.drop(1)))
+  		else
+  			raise RuntimeError, "No such function #{output[0]}"
+  	    end
     else
-    	object.public_send(delete_parenthesis(output).to_sym)
+    	if(@@functions.find { |f| (f[0] == output) })
+  			object.public_send(output.to_sym)
+  		else
+  			raise RuntimeError, "No such function #{output}"
+  	    end
     end
   end
   
-  def delete_parenthesis(string)
-  	string.tr('()', '')
+  def intialize_functions(filename)
+  	file = File.open(filename).read
+  	file.each_line { |line| 
+  		@@functions << line.gsub(/\s+/, ' ').strip.split(" ")
+  	}
   end
 ...end gameParser.racc/module_eval...
 ##### State transition tables begin ###
 
 racc_action_table = [
-     4,     5,     2,     3,     6,     7 ]
+     4,     5,     7,     2,     6,     3,     8,     9,    10,    11 ]
 
 racc_action_check = [
-     2,     2,     0,     1,     3,     5 ]
+     2,     2,     4,     0,     3,     1,     5,     7,     8,     9 ]
 
 racc_action_pointer = [
-     0,     3,    -3,     4,   nil,     1,   nil,   nil ]
+     1,     5,    -3,     4,    -1,     2,   nil,     4,     4,     6,
+   nil,   nil ]
 
 racc_action_default = [
-    -4,    -4,    -1,    -4,    -2,    -4,     8,    -3 ]
+    -8,    -8,    -1,    -8,    -2,    -8,    12,    -3,    -6,    -4,
+    -7,    -5 ]
 
 racc_goto_table = [
      1 ]
@@ -54,18 +69,22 @@ racc_reduce_table = [
   0, 0, :racc_error,
   1, 6, :_reduce_none,
   2, 6, :_reduce_2,
-  3, 6, :_reduce_3 ]
+  3, 6, :_reduce_3,
+  4, 6, :_reduce_4,
+  5, 6, :_reduce_5,
+  3, 6, :_reduce_6,
+  4, 6, :_reduce_7 ]
 
-racc_reduce_n = 4
+racc_reduce_n = 8
 
-racc_shift_n = 8
+racc_shift_n = 12
 
 racc_token_table = {
   false => 0,
   :error => 1,
   :FUNCTION => 2,
   :WORD => 3,
-  :DIGIT => 4 }
+  :NUMBER => 4 }
 
 racc_nt_base = 5
 
@@ -92,9 +111,9 @@ Racc_token_to_s_table = [
   "error",
   "FUNCTION",
   "WORD",
-  "DIGIT",
+  "NUMBER",
   "$start",
-  "expression" ]
+  "function" ]
 
 Racc_debug_parser = false
 
@@ -113,6 +132,34 @@ module_eval(<<'.,.,', 'gameParser.racc', 3)
 
 module_eval(<<'.,.,', 'gameParser.racc', 4)
   def _reduce_3(val, _values, result)
+     return val 
+    result
+  end
+.,.,
+
+module_eval(<<'.,.,', 'gameParser.racc', 5)
+  def _reduce_4(val, _values, result)
+     return val 
+    result
+  end
+.,.,
+
+module_eval(<<'.,.,', 'gameParser.racc', 6)
+  def _reduce_5(val, _values, result)
+     return val 
+    result
+  end
+.,.,
+
+module_eval(<<'.,.,', 'gameParser.racc', 7)
+  def _reduce_6(val, _values, result)
+     return val 
+    result
+  end
+.,.,
+
+module_eval(<<'.,.,', 'gameParser.racc', 8)
+  def _reduce_7(val, _values, result)
      return val 
     result
   end

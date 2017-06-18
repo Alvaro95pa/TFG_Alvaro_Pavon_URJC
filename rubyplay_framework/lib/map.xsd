@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <xs:schema targetNamespace="http://www.w3schools.com/map.xsd"
     elementFormDefault="qualified"
     xmlns="http://www.w3schools.com/map.xsd"
@@ -35,12 +34,6 @@
 	</xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="adjacentType">
-	<xs:sequence>
-		<xs:element name="point" type="pointType" minOccurs="1" maxOccurs="unbounded"/>
-	</xs:sequence>
-</xs:complexType>
-
 <xs:element name="map">
   <xs:complexType>
   	<xs:sequence>
@@ -49,7 +42,13 @@
 		  	<xs:sequence>
 			    <xs:element name="point" type="pointType" minOccurs="1" maxOccurs="1"/>
 			    <xs:element name="dungeon" type="dungeonType" minOccurs="1" maxOccurs="1"/>
-			    <xs:element name="adjacent" type="adjacentType" minOccurs="1" maxOccurs="1"/>
+			    <xs:element name="adjacent" minOccurs="1" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="point" type="pointType" minOccurs="1" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
 		    </xs:sequence>
 		  </xs:complexType>
   		</xs:element>

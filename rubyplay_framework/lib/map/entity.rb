@@ -41,9 +41,9 @@ module MapEntity
     attr_reader :entity
     
     #Builds the entity of a dungeon
-    def build_XML_entity(node, typePath, nametagPath)
-      add_type(node.xpath("#{typePath}/text()").to_s)
-      add_nametag(node.xpath("#{nametagPath}/text()").to_s)
+    def build_XML_entity(type, nametag)
+      add_type(type)
+      add_nametag(nametag)
     end
     
     def add_type(type)

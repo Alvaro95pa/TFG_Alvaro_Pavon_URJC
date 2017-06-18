@@ -61,14 +61,21 @@ module MapDungeon
     
     attr_reader :dungeon
     
-    def build_XML_dungeon(node, namePath, descriptionPath, entitiesPath = "")
-      add_name(node.xpath("#{namePath}/text()").to_s)
-      add_description(node.xpath("#{descriptionPath}/text()").to_s)
-      if(entitiesPath.length > 0)
-        node.xpath(entitiesPath).each() { |entity|
-          entityBuilder = EntityXPathBuilder.new()
-          entityBuilder.build_XML_entity(entity, "type", "nametag")
-          @dungeon.add_entity(entityBuilder.entity, entityBuilder.entity.type)
+    def build_XML_dungeon(name, description, node = nil, entityBuilder = "")
+      add_name(name)
+      add_description(description)
+      if(node != nil)
+        node.each() { |entity|
+          args = []
+          if(entityBuilder.length > 0)
+            builder = Object::const_get(entityBuilder).new()
+          else
+            builder = EntityXPathBuilder.new()
+          end
+          nodeSet = entity.xpath("*")
+          nodeSet.each { |n| args << n.content }
+          builder.build_XML_entity(*(args))
+          @dungeon.add_entity(builder.entity, builder.entity.type)
         }
       end
     end

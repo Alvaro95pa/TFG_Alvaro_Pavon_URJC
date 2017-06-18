@@ -47,10 +47,10 @@ module MapPoint
     attr_reader :point
     
     #Builds the point of a node
-    def build_XML_point(node, xPath, yPath, zPath)
-      add_x(node.xpath("#{xPath}/text()").to_s.to_i)
-      add_y(node.xpath("#{yPath}/text()").to_s.to_i)
-      add_z(node.xpath("#{zPath}/text()").to_s.to_i)
+    def build_XML_point(x, y, z)
+      add_x(x.to_i)
+      add_y(y.to_i)
+      add_z(z.to_i)
     end
     
     def add_x(x)

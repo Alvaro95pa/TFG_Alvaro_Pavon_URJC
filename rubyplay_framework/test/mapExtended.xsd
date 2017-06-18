@@ -3,21 +3,26 @@
 <xs:schema targetNamespace="http://www.w3schools.com/mapExtended.xsd"
     elementFormDefault="qualified"
     xmlns="http://www.w3schools.com/mapExtended.xsd"
+	xmlns:map="http://www.w3schools.com/map.xsd"
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
     
-<xs:include schemaLocation="http://www.w3schools.com/map.xsd"/>
+<xs:import namespace="http://www.w3schools.com/map.xsd" schemaLocation="../lib/map.xsd"/>
 
-<xs:complexType name="dungeonTypeExtend">
+<xs:complexType name="pointTypeExtended">
 	<xs:complexContent>
-		<xs:extension base="dungeonType">
+		<xs:extension base="map:pointType">
 			<xs:sequence>
-				<xs:element name="trap">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="damage" type="xs:integer"/>
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
+				<xs:element name="w" type="xs:integer"/>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="dungeonTypeExtended">
+	<xs:complexContent>
+		<xs:extension base="map:dungeonType">
+			<xs:sequence>
+				<xs:element name="lvl" type="xs:integer"/>
 			</xs:sequence>
 		</xs:extension>
 	</xs:complexContent>
@@ -29,9 +34,15 @@
   		<xs:element name="node" minOccurs="2" maxOccurs="unbounded">
 		  <xs:complexType>
 		  	<xs:sequence>
-			    <xs:element name="point" type="pointType" minOccurs="1" maxOccurs="1"/>
+			    <xs:element name="point" type="pointTypeExtended" minOccurs="1" maxOccurs="1"/>
 			    <xs:element name="dungeon" type="dungeonTypeExtended" minOccurs="1" maxOccurs="1"/>
-			    <xs:element name="adjacent" type="adjacentType" minOccurs="1" maxOccurs="1"/>
+			    <xs:element name="adjacent" minOccurs="1" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="point" type="pointTypeExtended" minOccurs="1" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
 		    </xs:sequence>
 		  </xs:complexType>
   		</xs:element>
