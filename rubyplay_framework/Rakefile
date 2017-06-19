@@ -1,0 +1,21 @@
+require 'rake/testtask'
+
+Rake::TestTask.new do |t|
+  t.libs << 'test'
+end
+
+desc "Run tests"
+task :default => :test
+
+desc "Generate Lexer"
+task :lexer do
+  `rex lib/interpreter/gameLexer.rex -o lib/interpreter/gameLexer.rb`
+end
+
+desc "Generate Parser"
+task :parser do
+  `racc lib/interpreter/gameParser.racc -o lib/interpreter/gameParser.rb`
+end
+
+desc "Generate Lexer and Parser"
+task :generate => [:lexer, :parser]

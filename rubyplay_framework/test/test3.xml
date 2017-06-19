@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map xmlns="http://www.w3schools.com/mapExtended.xsd"
+	 xmlns:map="http://www.w3schools.com/map.xsd"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.w3schools.com/mapExtended.xsd ./mapExtended.xsd">
+	<node>
+		<point>
+			<map:x>50</map:x>
+			<map:y>0</map:y>
+			<map:z>0</map:z>
+			<w>0</w>
+		</point>
+		<dungeon>
+			<map:name>Tomb</map:name>
+			<map:description>A small room with many coffins</map:description>
+			<map:entity>
+				<map:type>Chest</map:type>
+				<map:nametag>Iron chest</map:nametag>
+				<gold>100</gold>
+			</map:entity>
+			<lvl>23</lvl>
+		</dungeon>
+		<adjacent>
+			<point>
+				<map:x>50</map:x>
+				<map:y>0</map:y>
+				<map:z>0</map:z>
+				<w>1</w>
+			</point>
+		</adjacent>
+	</node>
+	<node>
+		<point>
+			<map:x>50</map:x>
+			<map:y>0</map:y>
+			<map:z>0</map:z>
+			<w>1</w>
+		</point>
+		<dungeon>
+			<map:name>Treasure room</map:name>
+			<map:description>A dark room filled with golden treasures</map:description>
+			<lvl>34</lvl>
+		</dungeon>
+		<adjacent>
+			<point>
+				<map:x>50</map:x>
+				<map:y>0</map:y>
+				<map:z>0</map:z>
+				<w>0</w>
+			</point>
+		</adjacent>
+	</node>
+</map>
