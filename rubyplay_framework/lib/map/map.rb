@@ -101,9 +101,6 @@ include MapPoint, MapDungeon, MapEntity
   def delete_adjacent(point, adjacent)
     @adjacencies[point].delete(adjacent)
     @adjacencies[adjacent].delete(point)
-    if(@map_nodes.length() != check_connectivity(point))
-      delete_node(adjacent)
-    end
   end
   
   #Adds a new entity to the node

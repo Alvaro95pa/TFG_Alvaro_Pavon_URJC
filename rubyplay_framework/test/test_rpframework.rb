@@ -115,7 +115,7 @@ end
 
 ############## TEST #################
 class RPTest < Minitest::Test
-  include Rubyplay_framework
+  include RubyplayFramework
   
   #Test interpreter
   def test_interpreter()
@@ -129,7 +129,7 @@ class RPTest < Minitest::Test
   
   #Test exception on file load
   def test_load()
-   m = init_Map() 
+    m = init_Map() 
     assert_raises(MapExceptions::MalformedMapException) {
       m.build_map("test/test2.xml")
     }  

@@ -6,7 +6,7 @@ require 'map/mapExceptions'
 require 'interpreter/gameLexer'
 require 'interpreter/gameParser'
 
-module Rubyplay_framework
+module RubyplayFramework
   include MapPoint, MapDungeon, MapEntity
   
   def init_Map()
