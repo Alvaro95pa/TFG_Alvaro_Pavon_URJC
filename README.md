@@ -156,8 +156,8 @@ En caso de querer ampliar el contenido del mapa es preciso realizar todos los pa
 				</xs:complexContent>
 			</xs:complexType>
 			
-		En el caso de entityType no es necesario extender el tipo porque entityType admite <any> elemento después de nametag.
-		En este caso, con poner cualquier nuevo elemento en el XML el XSD nos lo dará como bueno.
+	En el caso de entityType no es necesario extender el tipo porque entityType admite <any> elemento después de nametag.
+	En este caso, con poner cualquier nuevo elemento en el XML el XSD nos lo dará como bueno.
 		
 	1.3. Por último, se debe calcar la estructura que se define en el XSD original, pues el orden de aparición y número de los elementos es importante para que el mapa se construya correctamente:
 		
