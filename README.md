@@ -30,6 +30,7 @@ $ gem install rubyplay_framework
 La librería permite cargar mapas para juegos utilizando simplemente un fichero XML con toda la información necesaria. Se recomienda validar dicho [XML](https://www.w3schools.com/xml/) contra el [XSD](https://www.w3schools.com/xml/schema_intro.asp) que se incluye junto con la librería (lib/map.xsd). La validación te permitirá saber si tu XML va a generar un mapa correctamente o, por el contrario, si acabará produciendo un error (si lo que te interesa es saber como extender el XSD para que el mapa se construya con tus propios objetos salta a la sección Extendiendo mapas).
 
 Un ejemplo muy sencillo de fichero XML válido sería: 
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <map xmlns="http://www.w3schools.com/map.xsd"
@@ -118,26 +119,23 @@ En caso de querer ampliar el contenido del mapa es preciso realizar todos los pa
 1. Para generar un mapa extendido se recomienda extender el XSD proporcionado de la siguiente manera:
    
    1.1. El XSD consta de tres tipos definidos: pointType, entityType y dungeonType
-		Para extender dichos tipos predefinidos es necesario hacer import del XSD en el que se definen
-		de la siguiente manera:
-			```xml
-			<xs:schema targetNamespace="http://www.w3schools.com/mapExtended.xsd"
-			elementFormDefault="qualified"
-			xmlns="http://www.w3schools.com/mapExtended.xsd"
-			xmlns:map="http://www.w3schools.com/map.xsd"
-			xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	Para extender dichos tipos predefinidos es necesario hacer import del XSD en el que se definen de la siguiente manera:
+	
+		<xs:schema targetNamespace="http://www.w3schools.com/mapExtended.xsd"
+		elementFormDefault="qualified"
+		xmlns="http://www.w3schools.com/mapExtended.xsd"
+		xmlns:map="http://www.w3schools.com/map.xsd"
+		xmlns:xs="http://www.w3.org/2001/XMLSchema">
     
-			<xs:import namespace="http://www.w3schools.com/map.xsd" schemaLocation="../lib/map.xsd"/>
-			```
-			
-		Como se puede ver, se debe establecer un namespace concreto para los elementos del XSD que se van a extender.
-		También se debe incluir la etiqueta import con el namespace y la localización del esquema a extender.
+		<xs:import namespace="http://www.w3schools.com/map.xsd" schemaLocation="../lib/map.xsd"/>
+		
+	Como se puede ver, se debe establecer un namespace concreto para los elementos del XSD que se van a extender.
+	También se debe incluir la etiqueta import con el namespace y la localización del esquema a extender.
 		
 	1.2. Una vez importado el XSD original, podremos extender los tipos que se importan del mismo.
 		pointType y dungeonType se deben extender definiendo un nuevo tipo complejo en el que se extiendan los tipos importados
 		de la siguiente manera (etiqueta <extension>):
 			
-			```xml
 			<xs:complexType name="pointTypeExtended">
 				<xs:complexContent>
 					<xs:extension base="map:pointType">
@@ -157,15 +155,12 @@ En caso de querer ampliar el contenido del mapa es preciso realizar todos los pa
 					</xs:extension>
 				</xs:complexContent>
 			</xs:complexType>
-			```
 			
 		En el caso de entityType no es necesario extender el tipo porque entityType admite <any> elemento después de nametag.
 		En este caso, con poner cualquier nuevo elemento en el XML el XSD nos lo dará como bueno.
 		
-	1.3. Por último, se debe calcar la estructura que se define en el XSD original, pues el orden de aparición y número de los elementos
-		es importante para que el mapa se construya correctamente:
+	1.3. Por último, se debe calcar la estructura que se define en el XSD original, pues el orden de aparición y número de los elementos es importante para que el mapa se construya correctamente:
 		
-		```xml
 		<xs:element name="map">
 		  <xs:complexType>
 			<xs:sequence>
@@ -187,22 +182,18 @@ En caso de querer ampliar el contenido del mapa es preciso realizar todos los pa
 			</xs:sequence>
 		  </xs:complexType>
 		</xs:element>
-		```
-		
-		Todo se deja prácticamente igual, con la salvedad de que en los elementos point utilizamos el nuevo tipo extendido, 
-		al igual que en el elemento dungeon.
+
+	Todo se deja prácticamente igual, con la salvedad de que en los elementos point utilizamos el nuevo tipo extendido, 
+	al igual que en el elemento dungeon.
 		
 	1.4. Finalmente, en el XML se debe definir el namespace que se utiliza en el esquema extendido:
-	
-		```xml
-        <map xmlns="http://www.w3schools.com/mapExtended.xsd"
-         xmlns:map="http://www.w3schools.com/map.xsd"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://www.w3schools.com/mapExtended.xsd ./mapExtended.xsd">
-		```
-		
-    La definición del namespace se realiza junto con la referencia al esquema.
-	Ahora, cada vez que usemos un elemento original del XSD que se ha extendido se debe utilizar el namespace map.
+
+		<map xmlns="http://www.w3schools.com/mapExtended.xsd"
+		 xmlns:map="http://www.w3schools.com/map.xsd"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://www.w3schools.com/mapExtended.xsd ./mapExtended.xsd">
+
+    La definición del namespace se realiza junto con la referencia al esquema. Ahora, cada vez que usemos un elemento original del XSD que se ha extendido se debe utilizar el namespace map.
 		
 2. Se deben extender tanto las clases Point, Dungeon y Entity (en función de cuál de los tres elementos se extienda) así como
    las clases builder de cada uno.
@@ -211,7 +202,7 @@ En caso de querer ampliar el contenido del mapa es preciso realizar todos los pa
 	 En el caso de dungeon se debe situar los nuevos atributos antes de los atributos de la clase padre que tienen valores por defecto.
 	 Ejemplo: 
 		
-		```ruby
+```ruby
 		class PointExtended < MapPoint::Point
 		  def initialize(x = 0, y = 0, z = 0, w = 0)
 			super(x,y,z)
@@ -247,7 +238,7 @@ En caso de querer ampliar el contenido del mapa es preciso realizar todos los pa
 			@point.w = w
 		  end
 		end
-		```
+```
     
 ### Extender el intérprete
 
