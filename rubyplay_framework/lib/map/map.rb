@@ -24,19 +24,25 @@ include MapPoint, MapDungeon, MapEntity
       doc = parse_from_XML(filePath)
     end
     doc.remove_namespaces!
-    doc.xpath("//node").each() { |node|
+    doc.xpath("//node").each() do |node|
       coords = node.xpath("point//*")
       point = build_point(coords, pointBuilder)
       dungeonElements = node.xpath("dungeon//*[not(name()='entity') and not(ancestor-or-self::entity)]")
       dungeon = build_dungeon(node, dungeonElements, dungeonBuilder, entityBuilder)
       @map_nodes[point] = dungeon
       build_adjacent(point, node, pointBuilder)  
-    }
+    end
     p = @map_nodes.keys().sample() #Get random key
     if(@map_nodes.length() != check_connectivity(p))
       raise MapExceptions::MalformedMapException.new()
     end
   end   
+  
+  #Allows to make a movement without creating a explicit Point object
+  def move(point, entity, movX = 0, movY = 0, movZ = 0)
+    toPoint = Point.new(point.x()+movX, point.y()+movY, point.z()+movZ)
+    movement(point, toPoint, entity)
+  end
   
   #Puts move the entity from one point to an adjacent
   def movement(fromPoint, toPoint, entity)
@@ -46,12 +52,6 @@ include MapPoint, MapDungeon, MapEntity
     else
       raise MapExceptions::NotAdjacentException.new(fromPoint,toPoint)
     end
-  end
-  
-  #Allows to make a movement without creating a explicit Point object
-  def move(point, entity, movX = 0, movY = 0, movZ = 0)
-    toPoint = Point.new(point.x()+movX, point.y()+movY, point.z()+movZ)
-    movement(point, toPoint, entity)
   end
   
   #Check if point2 is in the adjacent list of point1
@@ -121,11 +121,11 @@ include MapPoint, MapDungeon, MapEntity
   #Checks if the map generated is fully connected
   def check_connectivity(point, visited = Hash.new())
     visited[point] = 1
-    @adjacencies[point].each { |nextPoint|
+    @adjacencies[point].each do |nextPoint|
       if(!visited.has_key?(nextPoint))
         check_connectivity(nextPoint, visited)
       end
-    }
+    end
     return visited.length()
   end
   
@@ -133,13 +133,13 @@ include MapPoint, MapDungeon, MapEntity
   def shortest_path(initial, destination)
     distance = Hash.new()
     visited = Hash.new()
-    @adjacencies.each_key { |point|
+    @adjacencies.each_key do |point|
       if(is_adjacent?(initial, point))
         distance[point] = 1
       else
         distance[point] = (2**(0.size * 8 - 2) - 1)
       end
-    }
+    end
     visited[initial] = true
     distance.delete(initial)
     until(visited.length == @adjacencies.length) do
@@ -150,12 +150,12 @@ include MapPoint, MapDungeon, MapEntity
           if(nextNode == destination)
             break;
           end
-          @adjacencies[nextNode].each { |a|
+          @adjacencies[nextNode].each do |a|
             alt = distance[nextNode] + 1
             if(!(visited.has_key?(a)) && alt < distance[a])
               distance[a] = alt
             end
-          }
+          end
           distance.delete(nextNode)
         end
       end
@@ -181,10 +181,10 @@ protected
     if(pointBuilder.length > 0)
       builder = Object::const_get(pointBuilder).new()
     else
-      builder = PointXPathBuilder.new()
+      builder = PointBuilder.new()
     end
     nodeSet.each { |node| args << node.content }
-    builder.build_XML_point(*(args))
+    builder.build_point(*(args))
     builder.point()
   end
   
@@ -194,15 +194,15 @@ protected
     if(dungeonBuilder.length > 0)
       builder = Object::const_get(dungeonBuilder).new()
     else
-      builder = DungeonXPathBuilder.new()
+      builder = DungeonBuilder.new()
     end
     nodeSet.each { |n| args << n.content }
     if(!(node.xpath("dungeon//entity").empty?))
       args << node.xpath("dungeon//entity")
       args << entityBuilder
-      builder.build_XML_dungeon(*(args))
+      builder.build_dungeon(*(args))
     else
-      builder.build_XML_dungeon(*(args))
+      builder.build_dungeon(*(args))
     end
     builder.dungeon()
   end

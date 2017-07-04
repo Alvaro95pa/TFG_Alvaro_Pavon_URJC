@@ -1,5 +1,3 @@
-require 'nokogiri'
-
 module MapEntity
   
   class Entity
@@ -32,7 +30,7 @@ module MapEntity
   end
   
   #Entity builder class
-  class EntityXPathBuilder
+  class EntityBuilder
     
     def initialize()
       @entity = Entity.new()
@@ -41,7 +39,7 @@ module MapEntity
     attr_reader :entity
     
     #Builds the entity of a dungeon
-    def build_XML_entity(type, nametag)
+    def build_entity(type, nametag)
       add_type(type)
       add_nametag(nametag)
     end

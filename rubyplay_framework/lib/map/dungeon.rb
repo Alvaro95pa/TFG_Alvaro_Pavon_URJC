@@ -52,7 +52,7 @@ module MapDungeon
   end
   
   #Dungeon builder class
-  class DungeonXPathBuilder
+  class DungeonBuilder
     include MapEntity
     
     def initialize()
@@ -61,22 +61,22 @@ module MapDungeon
     
     attr_reader :dungeon
     
-    def build_XML_dungeon(name, description, node = nil, entityBuilder = "")
+    def build_dungeon(name, description, node = nil, entityBuilder = "")
       add_name(name)
       add_description(description)
       if(node != nil)
-        node.each() { |entity|
+        node.each() do |entity|
           args = []
           if(entityBuilder.length > 0)
             builder = Object::const_get(entityBuilder).new()
           else
-            builder = EntityXPathBuilder.new()
+            builder = EntityBuilder.new()
           end
           nodeSet = entity.xpath("*")
           nodeSet.each { |n| args << n.content }
-          builder.build_XML_entity(*(args))
+          builder.build_entity(*(args))
           @dungeon.add_entity(builder.entity, builder.entity.type)
-        }
+        end
       end
     end
     
