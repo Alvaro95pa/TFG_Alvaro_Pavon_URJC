@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'rubyplay_framework'
-  s.version     = '1.6.5'
+  s.version     = '1.6.6'
   s.add_runtime_dependency "nokogiri", '~>1.6', '>= 1.6.8'
   s.add_runtime_dependency "rexical", '~>1.0', '>= 1.0.5'
   s.add_runtime_dependency "racc", '~>1.4', '>= 1.4.14'

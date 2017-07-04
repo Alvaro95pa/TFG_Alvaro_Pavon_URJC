@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to Semantic Versioning (http://semver.org/)
 
+## [1.6.6] - 04/07/2017
+### Changed
+-Version number in order to push the gem to RubyGems
+
 ## [1.6.5] - 04/07/2017
 ### Changed
 - Names of builder classes and the name of their builder method
