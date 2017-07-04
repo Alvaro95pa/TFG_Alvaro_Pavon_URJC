@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to Semantic Versioning (http://semver.org/)
 
+## [1.6.5] - 04/07/2017
+### Changed
+- Names of builder classes and the name of their builder method
+
+### Deleted
+- Some code lines without any use on Entity and Point
+
 ## [1.6.4] - 18/06/2017
 ### Added
 - Command interpreter with lexer and parser

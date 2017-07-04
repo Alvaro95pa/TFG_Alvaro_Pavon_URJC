@@ -1,5 +1,3 @@
-require 'nokogiri'
-
 module MapPoint
   
   class Point
@@ -38,7 +36,7 @@ module MapPoint
   end
   
   #Point builder class
-  class PointXPathBuilder
+  class PointBuilder
     
     def initialize()
       @point = Point.new()
@@ -47,7 +45,7 @@ module MapPoint
     attr_reader :point
     
     #Builds the point of a node
-    def build_XML_point(x, y, z)
+    def build_point(x, y, z)
       add_x(x.to_i)
       add_y(y.to_i)
       add_z(z.to_i)

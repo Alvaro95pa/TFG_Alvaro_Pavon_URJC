@@ -15,14 +15,14 @@ class EntityExtended < MapEntity::Entity
   attr_accessor :gold
 end
 
-class EntityXPathBuilderExtended < MapEntity::EntityXPathBuilder
+class EntityXPathBuilderExtended < MapEntity::EntityBuilder
   def initialize()
     @entity = EntityExtended.new()
   end
   
   attr_reader :entity
   
-  def build_XML_entity(type, nametag, gold)
+  def build_entity(type, nametag, gold)
     super(type, nametag)
     add_gold(gold.to_i)
   end
@@ -45,14 +45,14 @@ class DungeonExtended < MapDungeon::Dungeon
   end
 end
 
-class DungeonXPathBuilderExtended < MapDungeon::DungeonXPathBuilder
+class DungeonXPathBuilderExtended < MapDungeon::DungeonBuilder
   def initialize()
     @dungeon = DungeonExtended.new()
   end
   
   attr_reader :dungeon
   
-  def build_XML_dungeon(name, description, lvl, node = nil, entityBuilder = "")
+  def build_dungeon(name, description, lvl, node = nil, entityBuilder = "")
     super(name,description,node,entityBuilder)
     add_lvl(lvl.to_i)
   end
@@ -80,7 +80,7 @@ class PointExtended < MapPoint::Point
     end
 end
 
-class PointXPathBuilderExtended < MapPoint::PointXPathBuilder
+class PointXPathBuilderExtended < MapPoint::PointBuilder
   def initialize()
     @point = PointExtended.new()
   end
@@ -88,7 +88,7 @@ class PointXPathBuilderExtended < MapPoint::PointXPathBuilder
   attr_reader :point
   
   #Builds the point of a node
-  def build_XML_point(x, y, z, w)
+  def build_point(x, y, z, w)
     super(x,y,z)
     add_w(w.to_i)
   end
@@ -185,9 +185,9 @@ class RPTest < Minitest::Test
     m.build_map("test/test1.xml")
     point =  Point.new(0,0,0)
     entity = Entity.new("Hero", "Keops")
-    m.move(point,entity,1)
-    entity2 = Entity.new("Hero", "Keops")
-    assert(!(m.has_entity?(point,entity2)))
+    assert_raises(MapExceptions::NotAdjacentException) {
+      m.move(point,entity,50)
+    }
   end
   
   #Test add an entity to a node that already has an entity

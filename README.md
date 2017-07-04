@@ -1,12 +1,12 @@
 # Rubyplay
 
-A library to ease development of roleplay games for textual enviroments
+Una librería para facilitar el desarrollo de juegos de rol para interfaces de texto.
 
 [![Gem Version](https://badge.fury.io/rb/rubyplay_framework.svg)](https://badge.fury.io/rb/rubyplay_framework)
 
 ## Instalación
 
-Añade los siguiente a tu Gemfile:
+Añade lo siguiente a tu Gemfile:
 
 ```ruby
 gem 'rubyplay_framework', '~> 1.6', '>= 1.6.4'
@@ -78,7 +78,7 @@ Un ejemplo muy sencillo de fichero XML válido sería:
 </map>
 ```
 
-A continuación se muestra como generar el mapa:
+A continuación, se muestra como generar el mapa:
 
 ```ruby
 require 'rubyplay_framework'
@@ -86,18 +86,18 @@ require 'rubyplay_framework'
 map = init_Map()
 map.build_map("myMap.xml")
 ```
-Cabe destacar que el constructor del mapa `build_map(filePath)`espera recibir una mapa completamente conexo. Si en el fichero XML existe algún nodo que no presente ninguna adyacencia la cosntrucción del mapa fallará.
+Cabe destacar que el constructor del mapa `build_map(filePath)`espera recibir un mapa completamente conexo. Si en el fichero XML existe algún nodo que no presente ninguna adyacencia la construcción del mapa fallará.
 
 ### Intérprete
 
 La librería proporciona un sencillo intérprete de mandatos cuya finalidad es ejecutar las funciones correspondientes a los mandatos introducidos por los usuarios.
-Su funcionamiento es sencillo, se debe proporcionar un fichero con un listado de las funciones disponibles. Dicho fichero será utilizado por el parser para comprobar la correspondencia de la entrada recibida con alguna de las funciones listadas en el fichero. Si un función admite parámetros en el fichero se debe escribir el nombre de la función seguido de tantos parámetros como admita, separados por espacios (no importa el nombre que se dé a los parametros):
+Su funcionamiento es sencillo, se debe proporcionar un fichero con un listado de las funciones disponibles. Dicho fichero será utilizado por el parser para comprobar la correspondencia de la entrada recibida con alguna de las funciones listadas en el fichero. Si una función admite parámetros en el fichero se debe escribir el nombre de la función seguido de tantos parámetros como admita, separados por espacios (no importa el nombre que se dé a los parámetros):
 
 ```txt
 sumar x y
 sayHello
 ```
-A continuación se muestra como utilizar el intérprete:
+A continuación, se muestra cómo utilizar el intérprete:
 
 ```ruby
 require 'rubyplay_framework'
@@ -120,7 +120,7 @@ En caso de querer ampliar el contenido del mapa es preciso realizar todos los pa
    1.1. El XSD consta de tres tipos definidos: pointType, entityType y dungeonType
 		Para extender dichos tipos predefinidos es necesario hacer import del XSD en el que se definen
 		de la siguiente manera:
-		
+			```xml
 			<xs:schema targetNamespace="http://www.w3schools.com/mapExtended.xsd"
 			elementFormDefault="qualified"
 			xmlns="http://www.w3schools.com/mapExtended.xsd"
@@ -128,14 +128,16 @@ En caso de querer ampliar el contenido del mapa es preciso realizar todos los pa
 			xmlns:xs="http://www.w3.org/2001/XMLSchema">
     
 			<xs:import namespace="http://www.w3schools.com/map.xsd" schemaLocation="../lib/map.xsd"/>
+			```
 			
-		Como se puede ver se debe establecer un namespace concreto para los elementos del XSD que se va a extender.
+		Como se puede ver, se debe establecer un namespace concreto para los elementos del XSD que se van a extender.
 		También se debe incluir la etiqueta import con el namespace y la localización del esquema a extender.
 		
 	1.2. Una vez importado el XSD original, podremos extender los tipos que se importan del mismo.
 		pointType y dungeonType se deben extender definiendo un nuevo tipo complejo en el que se extiendan los tipos importados
-		de la siguiente manera (etiqueta extension):
-		 
+		de la siguiente manera (etiqueta <extension>):
+			
+			```xml
 			<xs:complexType name="pointTypeExtended">
 				<xs:complexContent>
 					<xs:extension base="map:pointType">
@@ -155,6 +157,7 @@ En caso de querer ampliar el contenido del mapa es preciso realizar todos los pa
 					</xs:extension>
 				</xs:complexContent>
 			</xs:complexType>
+			```
 			
 		En el caso de entityType no es necesario extender el tipo porque entityType admite <any> elemento después de nametag.
 		En este caso, con poner cualquier nuevo elemento en el XML el XSD nos lo dará como bueno.
@@ -162,6 +165,7 @@ En caso de querer ampliar el contenido del mapa es preciso realizar todos los pa
 	1.3. Por último, se debe calcar la estructura que se define en el XSD original, pues el orden de aparición y número de los elementos
 		es importante para que el mapa se construya correctamente:
 		
+		```xml
 		<xs:element name="map">
 		  <xs:complexType>
 			<xs:sequence>
@@ -183,27 +187,31 @@ En caso de querer ampliar el contenido del mapa es preciso realizar todos los pa
 			</xs:sequence>
 		  </xs:complexType>
 		</xs:element>
+		```
 		
 		Todo se deja prácticamente igual, con la salvedad de que en los elementos point utilizamos el nuevo tipo extendido, 
 		al igual que en el elemento dungeon.
 		
-	1.4. Finalmente en el XML se debe definir el namespace que se utiliza en el esquema extendido:
+	1.4. Finalmente, en el XML se debe definir el namespace que se utiliza en el esquema extendido:
 	
+		```xml
         <map xmlns="http://www.w3schools.com/mapExtended.xsd"
          xmlns:map="http://www.w3schools.com/map.xsd"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.w3schools.com/mapExtended.xsd ./mapExtended.xsd">
-			 
-    La definición del namespace se realiza junto con la referencia al esquema.
-		Ahora, cada vez que usemos un elemento original del XSD que se ha extendido se debe utilizar el namespace map.
+		```
 		
-2. Se deben extender tanto las clases Point, Dungeon y Entity (en función de cual de los tres elementos se extienda) así como
-	 las clases builder de cada uno.
+    La definición del namespace se realiza junto con la referencia al esquema.
+	Ahora, cada vez que usemos un elemento original del XSD que se ha extendido se debe utilizar el namespace map.
+		
+2. Se deben extender tanto las clases Point, Dungeon y Entity (en función de cuál de los tres elementos se extienda) así como
+   las clases builder de cada uno.
 	
-	 En el caso de las clases normales es importante redefinir el constructor (llamando a super para los atributos que son heredados de la    clase padre) y hacer un attr_accesor de los nuevos atributos. En la clase builder se debe crear un nuevo método constructor creando      un objeto de la nueva clase normal extendida y se debe redefinir el método build_XML_xxxx() para que admita los nuevos atributos. 
+	 En el caso de las clases normales es importante redefinir el constructor (llamando a super para los atributos que son heredados de la clase padre) y hacer un attr_accesor de los nuevos atributos. En la clase builder se debe crear un nuevo método constructor creando un objeto de la nueva clase normal extendida y se debe redefinir el método build_xxxx() para que admita los nuevos atributos. 
 	 En el caso de dungeon se debe situar los nuevos atributos antes de los atributos de la clase padre que tienen valores por defecto.
 	 Ejemplo: 
 		
+		```ruby
 		class PointExtended < MapPoint::Point
 		  def initialize(x = 0, y = 0, z = 0, w = 0)
 			super(x,y,z)
@@ -222,7 +230,7 @@ En caso de querer ampliar el contenido del mapa es preciso realizar todos los pa
 			end
 		end
 
-		class PointXPathBuilderExtended < MapPoint::PointXPathBuilder
+		class PointBuilderExtended < MapPoint::PointBuilder
 		  def initialize()
 			@point = PointExtended.new()
 		  end
@@ -230,7 +238,7 @@ En caso de querer ampliar el contenido del mapa es preciso realizar todos los pa
 		  attr_reader :point
 		  
 		  #Builds the point of a node
-		  def build_XML_point(x, y, z, w)
+		  def build_point(x, y, z, w)
 			super(x,y,z)
 			add_w(w.to_i)
 		  end
@@ -239,10 +247,11 @@ En caso de querer ampliar el contenido del mapa es preciso realizar todos los pa
 			@point.w = w
 		  end
 		end
+		```
     
 ### Extender el intérprete
 
-Para extender la funcionalidad del intérprete y hacerlo más genérico y flexible bastaría con tomar los ficheros gameLexer.rex y gameParser.racc incluídos en la librería. Estos ficheros se pueden modificar directamente para generar un lexer y un parser que trabajen en conjunto para formar el intérprete. El fichero gameLexer.rex emplea la sintaxis de [Rexical](https://github.com/tenderlove/rexical), mientras que gameParser.racc emplea la sistaxis de [Racc](https://github.com/tenderlove/racc).
+Para extender la funcionalidad del intérprete y hacerlo más genérico y flexible bastaría con tomar los ficheros gameLexer.rex y gameParser.racc incluidos en la librería. Estos ficheros se pueden modificar directamente para generar un lexer y un parser que trabajen en conjunto para formar el intérprete. El fichero gameLexer.rex emplea la sintaxis de [Rexical](https://github.com/tenderlove/rexical), mientras que gameParser.racc emplea la sintaxis de [Racc](https://github.com/tenderlove/racc).
 
 Para general los nuevos .rb para el lexer y el parser basta con compilarlos de la siguiente manera por consola (es necesario tener ambas librerías):
 
