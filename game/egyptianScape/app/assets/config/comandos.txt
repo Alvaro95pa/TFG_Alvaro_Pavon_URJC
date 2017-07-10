@@ -1,0 +1,10 @@
+norte
+sur
+este
+oeste
+arriba
+abajo
+pasadizo
+abrir
+hablar
+ritual
