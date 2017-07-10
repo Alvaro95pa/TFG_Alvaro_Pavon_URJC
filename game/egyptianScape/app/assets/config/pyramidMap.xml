@@ -80,11 +80,6 @@
 		<dungeon>
 			<name>Pasadizo estrecho</name>
 			<description>Aunque cabe una persona, este pasadizo es muy estrecho. El pasadizo termina en un muro de piedra. No hay salida por el otro lado.</description>
-			<entity>
-				<type>Chest</type>
-				<nametag>Vitrina rota</nametag>
-				<item>Vara dorada</item>
-			</entity>
 		</dungeon>
 		<adjacent>
 			<point>
@@ -190,11 +185,6 @@
 		<dungeon>
 			<name>Zona de baños</name>
 			<description>Casi todas las piscinas están vacías, a excepción de una. Tal vez esconda algo.</description>
-			<entity>
-				<type>Chest</type>
-				<nametag>Cajita metálica</nametag>
-				<item>Ídolo de Anubis</item>
-			</entity>
 		</dungeon>
 		<adjacent>
 			<point>
@@ -219,6 +209,11 @@
 				<x>-1</x>
 				<y>-10</y>
 				<z>1</z>
+			</point>
+			<point>
+				<x>-1</x>
+				<y>-11</y>
+				<z>2</z>
 			</point>
 		</adjacent>
 	</node>
@@ -327,7 +322,7 @@
 		</point>
 		<dungeon>
 			<name>Elevador</name>
-			<description>Tras el gran portón aguarda una pequeña sala con lo que parece ser un antiguo elevador. Hay un hueco que recuerda a una cerradura de grna tamaño en el mecanismo del elevador. Con el objeto aecuado se puede activar.</description>
+			<description>Tras el gran portón aguarda una pequeña sala con lo que parece ser un antiguo elevador. Es viejo pero de alguna forma aún funciona. LLeva directo a la salida.</description>
 		</dungeon>
 		<adjacent>
 			<point>
@@ -394,8 +389,8 @@
 			<name>Sala secreta</name>
 			<description>Extraña sala que irradia maldad. Parece haber un pequeño expositor colocado sobre una roca tallada.</description>
 			<entity>
-				<type>Chest</type>
-				<nametag>Pedestal de piedra</nametag>
+				<type>Cofre</type>
+				<nametag>Vitrina en un pedestal de piedra</nametag>
 				<item>Libro de Thoth</item>
 			</entity>
 		</dungeon>

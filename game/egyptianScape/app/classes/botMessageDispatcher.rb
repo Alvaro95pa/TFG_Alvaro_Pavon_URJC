@@ -31,7 +31,7 @@ class BotMessageDispatcher
       end
 
     elsif (user.get_next_bot_command == "GameMaster::Game")
-      if(@@bot_command.instance_of?(GameMaster::Start))
+      if(@@bot_command.instance_of?(GameMaster::Start) || (@@bot_command == nil))
         @@bot_command = user.get_next_bot_command.safe_constantize.new(user, message, hero)
       end
       @@bot_command.message = message
@@ -42,15 +42,13 @@ class BotMessageDispatcher
         @@bot_command.try_restart
       elsif (@@bot_command.restarting?)
         @@bot_command.restarting
-        if(user.get_next_bot_command == 'GameMaster::Start')
-          @hero = Heroe.new("Hero")
-          @@bot_command = user.get_next_bot_command.safe_constantize.new(user, message, hero)
-        end
+        @hero = Heroe.new("Hero")
+        @@bot_command = nil
       elsif (@@bot_command.playing?)
         @@bot_command.playing
-        if(@@bot_command.finPartida)
+        if(@hero.posicion == MapPoint::Point.new(0,-10,4))
           @hero = Heroe.new("Hero")
-          @@bot_command = user.get_next_bot_command.safe_constantize.new(user, message, hero)
+          @@bot_command = nil
         end
       else
         unknown_command

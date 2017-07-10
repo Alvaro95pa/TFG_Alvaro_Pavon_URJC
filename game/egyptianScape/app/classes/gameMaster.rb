@@ -2,13 +2,14 @@ require 'telegram/bot'
 require 'rubyplay_framework'
 require 'heroe'
 require 'cofre'
+require 'npc'
 
 module GameMaster
 
   class Base
     include RubyplayFramework
 
-    attr_accessor :user, :message, :finPartida
+    attr_accessor :user, :message
     attr_reader :api, :hero
 
     def initialize(user, message, hero)
@@ -17,9 +18,10 @@ module GameMaster
       token = Rails.application.secrets.bot_token
       @api = ::Telegram::Bot::Api.new(token)
       @hero = hero
+      @npc = nil
+      @cofre = nil
       @mapa = init_Map()
       @interprete = init_Interpreter()
-      @finPartida = false
     end
 
     def should_start?
@@ -101,7 +103,7 @@ module GameMaster
     end
 
     def playing?
-      text =~ /Moverse|Investigar|\w+/
+      text =~ /Moverse|Investigar|Mochila|\w+/
     end
 
     def try_restart?
@@ -115,23 +117,29 @@ module GameMaster
     def start
       p = MapPoint::Point.new(0, -10, -1)
       @hero.posicion = p
+      p = MapPoint::Point.new(0, -10, 1)
+      @npc = Npc.new("NPC", "Extraño encapuchado", p)
+      @cofre = Cofre::Cofre.new("Cofre", "Vitrina en un pedestal de piedra")
       @interprete.intialize_functions("app/assets/config/comandos.txt")
+
       @mapa.build_map("app/assets/config/pyramidMap.xml", "", "", "Cofre::CofreBuilder")
       p1 = MapPoint::Point.new(0, -10, 3)
       p2 = MapPoint::Point.new(0, -10, 4)
       @mapa.delete_adjacent(p1, p2)
       @mapa.add_entity(@hero.posicion, @hero)
+      @mapa.add_entity(@npc.posicion, @npc)
+
       kb = Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true)
       send_message("Despiertas en un lugar desconocido. Parecen unas antiguas ruinas. No recuerdas como has acabado allí, pero algo te dice que estás en grave peligro. Busca una salida, rápido.")
       send_message("#{@mapa.map_nodes[@hero.posicion]}", kb)
-      kb = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: ['Moverse', 'Investigar'], one_time_keyboard: true)
+      kb = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: ['Moverse', 'Investigar', 'Mochila'], one_time_keyboard: true)
       send_message("¿Qué quieres hacer?", kb)
       user.reset_next_bot_command
       user.set_next_bot_command('GameMaster::Game')
     end
 
     def playing
-      if(!@finPartida)
+      
         if(text =~ /Moverse/)
           if(@hero.posicion == MapPoint::Point.new(-1,-11,1))
             kb = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: ['norte','sur','este','oeste','arriba','abajo', 'pasadizo'], 
@@ -142,21 +150,62 @@ module GameMaster
           end
           send_message('¿En qué dirección?', kb)
         elsif(text =~ /Investigar/)
-          #Cosas
+          aux = []
+          @mapa.map_nodes[@hero.posicion].each_entity do |entity|
+            if(entity!=@hero)
+              aux << entity
+            end
+          end
+          if(aux.length > 0)
+            send_message('Mirando detenidamente alcanzas a ver:')
+            aux.each { |entity| send_message(entity.nametag) }
+            if(aux.find { |entity| entity.type == "NPC"})
+              if((@hero.mochila != nil) && (@hero.mochila[0] == "Libro de Thoth") && (@hero.posicion == MapPoint::Point.new(0,-10,-1)))
+                kb = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: ['hablar','ritual'], one_time_keyboard: true)
+                send_message("¿Qué quieres hacer?", kb)
+              else
+                kb = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: ['hablar'], one_time_keyboard: true)
+                send_message('¿Qué quieres hacer?', kb)
+              end
+            elsif(aux.find { |entity| entity.type == "Cofre"})
+              kb = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: ['abrir'], one_time_keyboard: true)
+              send_message('¿Qué quieres hacer?', kb)
+            else
+              kb = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: ['abrir','hablar'], one_time_keyboard: true)
+              send_message('¿Qué quieres hacer?', kb)
+            end
+          else
+            send_message('No hay nada interesante')
+            kb = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: ['Moverse','Investigar', 'Mochila'], one_time_keyboard: true)
+            send_message("¿Qué quieres hacer?", kb)
+          end
+        elsif(text =~ /Mochila/)
+          if(@hero.mochila != nil && !@hero.mochila.empty?)
+            send_message('En la mochila tienes lo siguiente:')
+            @hero.mochila.each { |item| send_message(item) }
+            kb = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: ['Moverse','Investigar','Mochila'], one_time_keyboard: true)
+            send_message("¿Qué quieres hacer?", kb)
+          else
+            send_message('La mochila está vacía')
+            kb = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: ['Moverse','Investigar','Mochila'], one_time_keyboard: true)
+            send_message("¿Qué quieres hacer?", kb)
+          end
         else
           success = try_interpreter
           if(success)
-            kb = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: ['Moverse', 'Investigar'], one_time_keyboard: true)
-            send_message("¿Qué quieres hacer?", kb)
+            if(@hero.posicion == MapPoint::Point.new(0,-10,4))
+              kb = Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true)
+              send_message("Enhorabuena, has logrado escapar. Escribe /start para volver a empezar.", kb)
+              user.reset_next_bot_command
+              user.set_next_bot_command('GameMaster::Start')
+            else
+              kb = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: ['Moverse','Investigar','Mochila'], one_time_keyboard: true)
+              send_message("¿Qué quieres hacer?", kb)
+              user.reset_next_bot_command
+              user.set_next_bot_command('GameMaster::Game')
+            end
           end
         end
-        user.reset_next_bot_command
-        user.set_next_bot_command('GameMaster::Game')
-      else
-        send_message("Enhorabuena, has logrado escapar")
-        user.reset_next_bot_command
-        user.set_next_bot_command('GameMaster::Start')
-      end
     end
 
     ########## MOVIMIENTOS ###########
@@ -226,7 +275,7 @@ module GameMaster
         @mapa.move(@hero.posicion, @hero, 0, -1)
         inicio = @hero.posicion
         nuevoPunto = MapPoint::Point.new(inicio.x(), inicio.y()-1, inicio.z())
-        @@hero.posicion = nuevoPunto
+        @hero.posicion = nuevoPunto
         send_message("#{@mapa.map_nodes[@hero.posicion]}")
       rescue
         send_message('El camino está bloqueado')
@@ -246,7 +295,44 @@ module GameMaster
     end
 
     ######## FIN MOVIMIENTOS ########
+    
+    ####### INTERACCIONES #######
+    
+    def abrir
+      @hero.mochila = ["Libro de Thoth"]
+      p = MapPoint::Point.new(0, -10, -1)
+      @mapa.add_entity(p, @npc)
+      p = MapPoint::Point.new(0, -10, 1)
+      @mapa.remove_entity(p, @npc)
+      send_message('Has obtenido el Libro de Thoth')
+      @mapa.remove_entity(@hero.posicion, @cofre)
+      p = MapPoint::Point.new(-1, -11, 1)
+      @mapa.delete_adjacent(@hero.posicion, p)
+      send_message('El pasadizo por el que has llegado se ha cerrado, pero la puerta oeste se ha abierto.')
+      p = MapPoint::Point.new(-1, -11, 2)
+      @mapa.add_new_adjacent(@hero.posicion, p)
+    end
+    
+    def hablar
+      if(@hero.mochila != nil && @hero.mochila[0] == "Libro de Thoth")
+        send_message(@npc.hablar2)
+      else
+        send_message(@npc.hablar1(@hero.genero))
+      end
+    end
 
+    def ritual
+      @mapa.remove_entity(@hero.posicion, @npc)
+      @hero.mochila.shift
+      p1 = MapPoint::Point.new(0, -10, 3)
+      p2 = MapPoint::Point.new(0, -10, 4)
+      @mapa.add_new_adjacent(p1, p2)
+      send_message('Un temblor. Parece que se ha abierto algo en alguna parte')
+    end
+    
+    #############################
+    
+    ######## Interprete ########
     def try_interpreter
       begin
         @interprete.parse(self, text)
@@ -255,7 +341,8 @@ module GameMaster
         send_message("Esa acción no está disponible")
         return false
       end
-    end  
+    end 
+    ########################### 
 
     def try_restart
       kb = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: ['Sí', 'No'], one_time_keyboard: true)

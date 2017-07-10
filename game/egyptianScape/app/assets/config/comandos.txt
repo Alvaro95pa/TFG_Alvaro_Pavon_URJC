@@ -1,7 +1,10 @@
-norte x y z
-sur x y z
-este x y z
-oeste x y z
-arriba x y z
-abajo x y z
-pasadizo x y z
+norte
+sur
+este
+oeste
+arriba
+abajo
+pasadizo
+abrir
+hablar
+ritual
