@@ -10,7 +10,7 @@
 		</point>
 		<dungeon>
 			<name>Altar de rituales</name>
-			<description>La estancia está escasamente iluminada por antorchas. Hay grandes indicios de que en la estancia se realizaban extraños rituales.</description>
+			<description>La estancia está escasamente iluminada por antorchas. Hay grandes indicios de que en este lugar se realizaban extraños rituales.</description>
 		</dungeon>
 		<adjacent>
 			<point>
@@ -80,6 +80,11 @@
 		<dungeon>
 			<name>Pasadizo estrecho</name>
 			<description>Aunque cabe una persona, este pasadizo es muy estrecho. El pasadizo termina en un muro de piedra. No hay salida por el otro lado.</description>
+			<entity>
+				<type>Chest</type>
+				<nametag>Vitrina rota</nametag>
+				<item>Vara dorada</item>
+			</entity>
 		</dungeon>
 		<adjacent>
 			<point>
@@ -185,6 +190,11 @@
 		<dungeon>
 			<name>Zona de baños</name>
 			<description>Casi todas las piscinas están vacías, a excepción de una. Tal vez esconda algo.</description>
+			<entity>
+				<type>Chest</type>
+				<nametag>Cajita metálica</nametag>
+				<item>Ídolo de Anubis</item>
+			</entity>
 		</dungeon>
 		<adjacent>
 			<point>
@@ -383,6 +393,11 @@
 		<dungeon>
 			<name>Sala secreta</name>
 			<description>Extraña sala que irradia maldad. Parece haber un pequeño expositor colocado sobre una roca tallada.</description>
+			<entity>
+				<type>Chest</type>
+				<nametag>Pedestal de piedra</nametag>
+				<item>Libro de Thoth</item>
+			</entity>
 		</dungeon>
 		<adjacent>
 			<point>

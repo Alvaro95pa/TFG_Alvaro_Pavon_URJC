@@ -1,40 +1,54 @@
 require 'rubyplay_framework'
 
-module Heroe
   class Heroe < MapEntity::Entity
     
-    def intialize(type = "", nametag = "", gender = "")
+    def intialize(type = "Heroe", nametag = "", genero = "", posicion = nil)
       super(type, nametag)
-      @gender = gender
-      @bag = []
+      @genero = genero
+      @mochila = []
+      @posicion = posicion
     end
+    
+    attr_accessor :genero, :posicion
 
-    attr_accessor :nametag, :gender
-    
-    def coger(item)
-      @bag << item
+    def avanzar(point)
+      @posicion = point
     end
     
-    def coger(cofre)
-      cofre.each do |item|
-        coger(item)
+    def tomar(item)
+      @mochila << item
+    end
+    
+    def tomar_items(cofre)
+      cofre.each_item do |item|
+        tomar(item)
         cofre.delete_item(item)
       end
     end
     
-    def ritual(altar)
-      if(@bag.find { |item| item.name == "Libro de Thoth"})
-        altar.realizar_ritual
+    def mochila()
+      @mochila.each { |item| yield item }
+    end
+    
+    def ejecutar_ritual(altar)
+      if(@mochila.find { |item| item.name == "Libro de Thoth"})
         message = "Ritual completado. En algún lugar se ha abierto una puerta."
       else
         message = "No tienes el objeto necesario"
       end
       return message
     end
-
-    def to_s()
-      "Nombre: #{nametag}\nGénero: #{gender}"
+    
+    def activar_elevador(elevador)
+      if(@mochila.find { |item| item.nombre == "Ídolo de Anubis" })
+        message = "El elevador se ha activado"
+      else
+        message = "No tienes el objeto necesario"
+      end
+      return message
+    end
+    
+    def hablar(npc)
     end
     
   end
-end

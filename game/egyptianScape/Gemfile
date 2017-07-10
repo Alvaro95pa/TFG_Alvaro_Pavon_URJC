@@ -37,7 +37,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'telegram-bot-ruby'
 
 #Roleplay games develop gem
-gem 'rubyplay_framework'
+gem 'rubyplay_framework', '~> 1.6', '>= 1.6.6'
 
 #PostgreSQL
 gem 'pg'

@@ -129,7 +129,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (12.0.0)
     rexical (1.0.5)
-    rubyplay_framework (1.6.4)
+    rubyplay_framework (1.6.6)
       nokogiri (~> 1.6, >= 1.6.8)
       racc (~> 1.4, >= 1.4.14)
       rexical (~> 1.0, >= 1.0.5)
@@ -194,7 +194,7 @@ DEPENDENCIES
   pg
   puma (~> 3.7)
   rails (~> 5.1.1)
-  rubyplay_framework
+  rubyplay_framework (~> 1.6, >= 1.6.6)
   sass-rails (~> 5.0)
   selenium-webdriver
   sqlite3
