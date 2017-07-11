@@ -252,3 +252,84 @@ $ rex lib/interpreter/gameLexer.rex -o lib/interpreter/gameLexer.rb
 ```shell
 $ racc lib/interpreter/gameParser.racc -o lib/interpreter/gameParser.rb
 ```
+
+## Ejecutar el ejemplo
+
+Para poder ejecutar y probar el ejemplo de bot de juego que se proporciona en este repositorio es necesario:
+1) Tener Ruby y Ruby on Rails instalados en la máquina
+
+2) Tener Postgresql instalado (se puede utilizar otra base de datos, pero se recomienda utilizar Postgre por simplicidad)
+
+3) De cara a ejecutar el servidor Rails en local se deben tener en cuenta los siguientes aspectos:
+
+	3.1) Es probable que la ejecución falle debido a la falta de un certificado SSL. Esto se puede solucionar "seteando" uno 		manualmente, de la siguiente manera:
+	
+	```shell
+	$ set SSL_CERT_FILE=certificado
+	```
+	
+	3.2) El servidor Rails por defecto se establece en el localhost 3000. La API de Telegram, no permite el envío de mensajes a 		traves de webhooks hacia conexiones no seguras, por lo que se debe securizar el localhost para que sea https. Una herramienta 		muy sencilla para realizar esto es ngrok.
+	
+4) Preparación del bot y de la webhook (se necesita cuenta en Telegram):
+
+	4.1) Para poder comunicar un bot con Telegram, es necesario registrar el bot para obtener un token de identificación. En el 		siguiente enlace se indica adecuadamente como realizar este paso:
+	
+	https://core.telegram.org/bots#6-botfather
+	
+	4.2) Para establecer la dirección de la webhook se necesita el token de identificación y (en caso de usar ngrok para securizar 		localhost) la nueva dirección https que recubre al localhost correspondiente. Para setear la webhook basta por poner lo 		siguiente en el navegador:
+	
+	```shell
+	https://api.telegram.org/bot<telegram_bot_token_from_botfather>/setWebhook?url=<your_https_ngrok_url>/webhooks/telegram_<place_some_big_random_token_here>
+	```
+	
+	Sustituyendo los elementos entre <> por lo que corresponda. En el último caso, <place_some_big_random_token_here>, este token se 	 utiliza para securizar la url de la webhook y evitar que sea accesible por cualquiera.
+	Si se realizo correctamente, se recibirá una respuesta indicando que la webhook esta seteada.
+	
+5) Preparación de Rails:
+
+	5.1) En primer lugar, abre la consola en el directorio raíz del proyecto y ejecuta el siguiente comando para instalar todas las 	gemas que necesita el juego para funcionar:
+	
+	```shell
+	$ bundle install
+	```
+	
+	5.2) Genera las claves "secret_key_base" usando Rake o creando una manualmente (no recomendado) y setealas en el fichero 		secrets.yml:
+	
+	```shell
+	$ rake secret
+	```
+	
+	5.3) Añade al fichero secrets.yml el token de identificación de tu bot:
+	
+	```ruby
+	development:
+  		secret_key_base: "secret key"
+  		bot_token: "token del bot"
+	```
+	
+	5.4) Setea en el fichero routes.rb la URI (cogiendo de la URL a partir de la URL https de ngrok) de la webhook para realizar 		llamada callback al controlador. Siguiendo el ejemplo de seteo de la webhook:
+	
+	```ruby
+	post '/webhooks/telegram_<place_some_big_random_token_here>' => 'webhook#callback'
+	```
+	
+	5.5) Asegúrate de que las tablas de las bases de datos están bien creadas ejecutando los siguiente comandos, en este orden:
+	
+	```shell
+	$ rake db:create
+	$ rake db:migrate
+	```
+	
+	5.6) En caso de que Rails deniege acceso a la IP desde la que estén llegando las peticiones, se puede añadir dicha IP a la 		whitelist del proyecto, añadiendo lo siguiente a cualquiera de los ficheros .rb (dependiendo del entorno que se pretenda poner 		en ejecución) del directorio "config/environments":
+	
+	```ruby
+	config.web_console.whitelisted_ips = '<Direccion_IP>'
+	```
+	
+6) Para ejecutar el bot basta con utilizar el siguiente comando:
+
+	```shell
+	$ rails server
+	```
+	
+	
